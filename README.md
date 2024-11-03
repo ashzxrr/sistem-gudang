@@ -9,7 +9,7 @@ Dokumentasi lengkap untuk API sistem gudang dapat ditemukan di
 
 1. **Clone repository ini**:
    ```bash
-   git clone https://github.com/username/sistem-gudang.git
+   git clone https://github.com/ashzxrr/sistem-gudang.git
 
 ## Cara Instalasi
 
@@ -27,6 +27,8 @@ Dokumentasi lengkap untuk API sistem gudang dapat ditemukan di
 Konfigurasi database 
 DB_DATABASE=sistem-gudang-db
 
+buat db baru (sistem-gudang-db)
+impor sistem-gudang-db.sql
 ## run program
 cd (direktori program)
 php artisan serve
