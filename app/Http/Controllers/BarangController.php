@@ -7,9 +7,18 @@ use Illuminate\Http\Request;
 
 class BarangController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $barangs = Barang::all();
+        // Mengambil query dari request, jika tidak ada maka nilai default adalah null
+        $search = $request->query('search');
+
+        // Jika ada parameter pencarian, lakukan pencarian
+        $barangs = Barang::when($search, function ($query, $search) {
+            return $query->where('nama_barang', 'like', '%' . $search . '%')
+                         ->orWhere('kode', 'like', '%' . $search . '%')
+                         ->orWhere('kategori', 'like', '%' . $search . '%');
+        })->get();
+
         return response()->json($barangs);
     }
 
@@ -26,14 +35,11 @@ class BarangController extends Controller
         return response()->json($barang, 201);
     }
 
-    // Menampilkan barang berdasarkan ID
     public function show($id)
     {
         $barang = Barang::findOrFail($id);
         return response()->json($barang);
     }
-
-    
 
     public function update(Request $request, $id)
     {
@@ -48,7 +54,6 @@ class BarangController extends Controller
         $barang->update($validatedData);
         return response()->json(['message' => 'Barang updated successfully']);
     }
-
 
     public function destroy($id)
     {

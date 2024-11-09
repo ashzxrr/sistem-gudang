@@ -23,10 +23,18 @@ class MutasiController extends Controller
         return response()->json($mutasi, 201);
     }
 
-    // Menampilkan semua mutasi
-    public function index()
+    // Menampilkan semua mutasi dengan filter jenis_mutasi dan tanggal
+    public function index(Request $request)
     {
-        $mutasis = Mutasi::all();
+        $jenisMutasi = $request->query('jenis_mutasi'); // nilai bisa "masuk" atau "keluar"
+        $tanggal = $request->query('tanggal'); // format tanggal: "YYYY-MM-DD"
+
+        $mutasis = Mutasi::when($jenisMutasi, function ($query, $jenisMutasi) {
+            return $query->where('jenis_mutasi', $jenisMutasi);
+        })->when($tanggal, function ($query, $tanggal) {
+            return $query->whereDate('tanggal', $tanggal);
+        })->get();
+
         return response()->json($mutasis);
     }
 
